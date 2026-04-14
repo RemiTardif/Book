@@ -20,10 +20,14 @@ jobs:
           distribution: 'temurin'
 
       - name: Build
-        run: ./gradlew build
+        run: |
+          chmod +x gradlew
+          ./gradlew build
 
       - name: Run tests
-        run: ./gradlew test
+        run: |
+          chmod +x gradlew
+          ./gradlew test
 
       - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@v2
