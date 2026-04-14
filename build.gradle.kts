@@ -3,6 +3,7 @@ plugins {
 	kotlin("plugin.spring") version "1.9.25"
 	id("org.springframework.boot") version "3.5.13"
 	id("io.spring.dependency-management") version "1.1.7"
+    id("info.solidsoft.pitest") version "1.15.0"
     jacoco
 }
 
@@ -52,4 +53,10 @@ tasks.jacocoTestReport {
         xml.required = true
         html.required = true
     }
+}
+
+pitest {
+    targetClasses.set(setOf("com.example.demo.*"))
+    outputFormats.set(setOf("HTML", "XML"))
+    mutationThreshold.set(0)
 }
