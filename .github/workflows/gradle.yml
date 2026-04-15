@@ -54,3 +54,8 @@ jobs:
         run: |
             chmod +x gradlew
             ./gradlew pitest
+
+      - name: Run integration tests
+        run: |
+            chmod +x gradlew
+            ./gradlew testIntegration
