@@ -160,3 +160,11 @@ detekt {
     buildUponDefaultConfig = true
     toolVersion = "1.23.1"
 }
+
+configurations.matching { it.name.contains("detekt") }.all {
+    resolutionStrategy.eachDependency {
+        if (requested.group == "org.jetbrains.kotlin") {
+            useVersion("1.9.25")
+        }
+    }
+}
