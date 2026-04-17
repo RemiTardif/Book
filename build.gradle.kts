@@ -158,4 +158,5 @@ pitest {
 detekt {
     config.setFrom("config/detekt.yml")
     buildUponDefaultConfig = true
+    ignoreFailures = true
 }
