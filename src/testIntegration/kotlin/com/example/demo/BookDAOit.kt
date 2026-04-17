@@ -1,10 +1,12 @@
 package com.example.demo
 
+import com.example.demo.domain.model.Book
 import com.example.demo.infrastructure.driven.postgres.BookDAO
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -40,20 +42,20 @@ class BookDAOIT(
 
         test("save sauvegarde un livre en base") {
             // Arrange
-            val cesar = com.example.demo.domain.model.Book("Harry Potter", "Rowling")
+            val book = Book(id = "1", titre = "Harry Potter", auteur = "Rowling")
 
             // Act
-            bookDAO.save(cesar)
+            bookDAO.save(book)
 
             // Assert
             val result = bookDAO.findAll()
-            result shouldContain cesar
+            result shouldContain book
         }
 
         test("findAll retourne tous les livres") {
             // Arrange
-            val book1 = com.example.demo.domain.model.Book("Harry Potter", "Rowling")
-            val book2 = com.example.demo.domain.model.Book("Alice", "Auteur2")
+            val book1 = Book(id = "1", titre = "Harry Potter", auteur = "Rowling")
+            val book2 = Book(id = "2", titre = "Alice", auteur = "Auteur2")
             bookDAO.save(book1)
             bookDAO.save(book2)
 
@@ -64,6 +66,42 @@ class BookDAOIT(
             result.size shouldBe 2
             result shouldContain book1
             result shouldContain book2
+        }
+
+        test("findById retourne le livre correspondant") {
+            // Arrange
+            val book = Book(id = "1", titre = "Harry Potter", auteur = "Rowling")
+            bookDAO.save(book)
+
+            // Act
+            val result = bookDAO.findById("1")
+
+            // Assert
+            result shouldNotBe null
+            result!!.id shouldBe "1"
+            result.titre shouldBe "Harry Potter"
+            result.reserved shouldBe false
+        }
+
+        test("findById retourne null si le livre n'existe pas") {
+            // Act
+            val result = bookDAO.findById("999")
+
+            // Assert
+            result shouldBe null
+        }
+
+        test("update modifie le reserved du livre en base") {
+            // Arrange
+            val book = Book(id = "1", titre = "Harry Potter", auteur = "Rowling", reserved = false)
+            bookDAO.save(book)
+
+            // Act
+            bookDAO.update(book.copy(reserved = true))
+
+            // Assert
+            val result = bookDAO.findById("1")
+            result!!.reserved shouldBe true
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.demo
 
 import io.cucumber.java.Before
+import io.cucumber.java.en.And
 import io.cucumber.java.en.Given
 import io.cucumber.java.en.Then
 import io.cucumber.java.en.When
@@ -19,6 +20,7 @@ class BookStepDefs(
     private var port: Int? = 0
 
     private var lastResponse: Response? = null
+    private var lastCreatedId: String? = null
 
     @Before
     fun setup() {
@@ -37,6 +39,7 @@ class BookStepDefs(
             .then()
             .extract()
             .response()
+        lastCreatedId = lastResponse?.jsonPath()?.getString("id")
     }
 
     @When("l'utilisateur récupère tous les livres")
@@ -61,6 +64,39 @@ class BookStepDefs(
             .response()
     }
 
+    @When("l'utilisateur réserve le livre créé")
+    fun reserveBook() {
+        lastResponse = RestAssured.given()
+            .contentType("application/json")
+            .`when`()
+            .post("/books/$lastCreatedId/reserve")
+            .then()
+            .extract()
+            .response()
+    }
+
+    @Given("l'utilisateur a déjà réservé le livre créé")
+    fun alreadyReserveBook() {
+        RestAssured.given()
+            .contentType("application/json")
+            .`when`()
+            .post("/books/$lastCreatedId/reserve")
+            .then()
+            .extract()
+            .response()
+    }
+
+    @When("l'utilisateur tente de réserver le livre créé à nouveau")
+    fun reserveBookAgain() {
+        lastResponse = RestAssured.given()
+            .contentType("application/json")
+            .`when`()
+            .post("/books/$lastCreatedId/reserve")
+            .then()
+            .extract()
+            .response()
+    }
+
     @Then("la liste contient le livre avec le titre {string} et l'auteur {string}")
     fun listContainsBook(titre: String, auteur: String) {
         lastResponse?.statusCode shouldBe 200
@@ -71,5 +107,11 @@ class BookStepDefs(
     @Then("la réponse a le status {int}")
     fun responseHasStatus(status: Int) {
         lastResponse?.statusCode shouldBe status
+    }
+
+    @Then("le livre est marqué comme réservé")
+    fun bookIsReserved() {
+        lastResponse?.statusCode shouldBe 200
+        lastResponse?.jsonPath()?.getBoolean("reserved") shouldBe true
     }
 }

@@ -11,10 +11,12 @@ class BookDAO(private val namedParameterJdbcTemplate: NamedParameterJdbcTemplate
 
     override fun save(book: Book) {
         namedParameterJdbcTemplate.update(
-            "INSERT INTO book (titre, auteur) VALUES (:titre, :auteur)",
+            "INSERT INTO book (id, titre, auteur, reserved) VALUES (:id, :titre, :auteur, :reserved)",
             MapSqlParameterSource()
+                .addValue("id", book.id)
                 .addValue("titre", book.titre)
                 .addValue("auteur", book.auteur)
+                .addValue("reserved", book.reserved)
         )
     }
 
@@ -24,9 +26,34 @@ class BookDAO(private val namedParameterJdbcTemplate: NamedParameterJdbcTemplate
             MapSqlParameterSource()
         ) { rs, _ ->
             Book(
+                id = rs.getString("id"),
                 titre = rs.getString("titre"),
-                auteur = rs.getString("auteur")
+                auteur = rs.getString("auteur"),
+                reserved = rs.getBoolean("reserved")
             )
         }
+    }
+
+    override fun findById(id: String): Book? {
+        return namedParameterJdbcTemplate.query(
+            "SELECT * FROM book WHERE id = :id",
+            MapSqlParameterSource().addValue("id", id)
+        ) { rs, _ ->
+            Book(
+                id = rs.getString("id"),
+                titre = rs.getString("titre"),
+                auteur = rs.getString("auteur"),
+                reserved = rs.getBoolean("reserved")
+            )
+        }.firstOrNull()
+    }
+
+    override fun update(book: Book) {
+        namedParameterJdbcTemplate.update(
+            "UPDATE book SET reserved = :reserved WHERE id = :id",
+            MapSqlParameterSource()
+                .addValue("reserved", book.reserved)
+                .addValue("id", book.id)
+        )
     }
 }
