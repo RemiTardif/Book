@@ -1,9 +1,10 @@
 plugins {
-    kotlin("jvm") version "1.9.25"
-    kotlin("plugin.spring") version "1.9.25"
+    kotlin("jvm") version "2.0.21"
+    kotlin("plugin.spring") version "2.0.21"
     id("org.springframework.boot") version "3.5.13"
     id("io.spring.dependency-management") version "1.1.7"
     id("info.solidsoft.pitest") version "1.15.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.7"
     jacoco
 }
 
@@ -73,6 +74,8 @@ val testArchitectureImplementation: Configuration by configurations.getting {
 }
 
 dependencies {
+
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.7")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -150,4 +153,9 @@ pitest {
     targetClasses.set(setOf("com.example.demo.*"))
     outputFormats.set(setOf("HTML", "XML"))
     mutationThreshold.set(0)
+}
+
+detekt {
+    config.setFrom("config/detekt.yml")
+    buildUponDefaultConfig = true
 }
