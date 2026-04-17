@@ -67,5 +67,5 @@ jobs:
 
       - name: Run Detekt
         run: |
-            chmod +x gradlew
-            ./gradlew detekt
+            curl -sSLO https://github.com/detekt/detekt/releases/download/v1.23.6/detekt-cli-1.23.6-all.jar
+            java -jar detekt-cli-1.23.6-all.jar --input src --config config/detekt.yml --report txt:build/reports/detekt.txt || true

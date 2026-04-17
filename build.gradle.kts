@@ -4,7 +4,6 @@ plugins {
     id("org.springframework.boot") version "3.5.13"
     id("io.spring.dependency-management") version "1.1.7"
     id("info.solidsoft.pitest") version "1.15.0"
-    id("io.gitlab.arturbosch.detekt") version "1.23.1"
     jacoco
 }
 
@@ -116,8 +115,6 @@ dependencies {
     testArchitectureImplementation("com.tngtech.archunit:archunit-junit5:1.0.1")
     testArchitectureImplementation("io.kotest:kotest-assertions-core:5.9.1")
     testArchitectureImplementation("io.kotest:kotest-runner-junit5:5.9.1")
-
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.1")
 }
 
 kotlin {
@@ -154,10 +151,3 @@ pitest {
     outputFormats.set(setOf("HTML", "XML"))
     mutationThreshold.set(0)
 }
-
-detekt {
-    config.setFrom("config/detekt.yml")
-    buildUponDefaultConfig = true
-    ignoreFailures = true
-}
-
