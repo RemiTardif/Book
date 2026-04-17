@@ -1,0 +1,9 @@
+style:
+  MaxLineLength:
+    maxLineLength: 120
+  MagicNumber:
+    active: false
+
+complexity:
+  TooManyFunctions:
+    active: false

@@ -64,3 +64,8 @@ jobs:
         run: |
             chmod +x gradlew
             ./gradlew testComponent
+
+      - name: Run Detekt
+        run: |
+            chmod +x gradlew
+            ./gradlew detekt
