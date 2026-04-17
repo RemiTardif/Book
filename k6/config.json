@@ -11,7 +11,7 @@
     }
   },
   "thresholds": {
-    "failed requests": ["rate<0.01"],
+    "failed_requests": ["rate<0.01"],
     "http_req_duration{scenario:test_api_endpoints_config}": ["p(95)<50"]
   }
 }
