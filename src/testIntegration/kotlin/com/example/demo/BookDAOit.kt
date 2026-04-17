@@ -34,8 +34,7 @@ class BookDAOIT(
     init {
         afterEach {
             namedParameterJdbcTemplate.update(
-                "DELETE FROM book",
-                MapSqlParameterSource()
+                "DELETE FROM book", MapSqlParameterSource()
             )
         }
 

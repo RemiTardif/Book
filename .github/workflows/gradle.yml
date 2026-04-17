@@ -59,3 +59,8 @@ jobs:
         run: |
             chmod +x gradlew
             ./gradlew testIntegration
+
+      - name: Run component tests
+        run: |
+            chmod +x gradlew
+            ./gradlew testComponent

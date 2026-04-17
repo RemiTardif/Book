@@ -5,6 +5,7 @@ import com.example.demo.domain.usecase.BookUseCase
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
+//Permettant de faire le lien entre le domain et le driven et driving
 @Configuration
 class UseCasesConfiguration {
 
